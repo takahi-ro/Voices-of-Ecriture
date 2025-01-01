@@ -9,8 +9,8 @@ let word, roop, tSize, textForest, textForest0, p5Canvas;
 
 // p5.jsのスケッチコンポーネント
 export const Sketch = () => {
-//ファイルアップロードの処理
-  //テキストの取得
+  //ファイルアップロードの処理
+  ////テキストの取得
   const onDrop = useCallback((acceptedFiles) => {
     acceptedFiles.forEach((file) => {
       const reader = new FileReader()
@@ -23,7 +23,7 @@ export const Sketch = () => {
       reader.readAsText(file)
     })
   }, [])
-  //Dropzoneの設定
+  ////Dropzoneの設定
   const { 
     acceptedFiles, 
     getRootProps, 
@@ -38,7 +38,7 @@ export const Sketch = () => {
     maxFiles: 1,
     onDrop
   });
-  //ファイルアップロードのスタイル
+  ////ファイルアップロードのスタイル
   const baseStyle = {
     flex: 1,
     display: 'flex',
@@ -168,10 +168,8 @@ export const Sketch = () => {
         variant="contained"
         sx={{ marginBottom: '15px' }}
         onClick = {() => {  
-          // window.location.reload()
           p5Canvas.remove();
           setIsUploaded(false);
-          
         }}>
         リセット
       </Button>

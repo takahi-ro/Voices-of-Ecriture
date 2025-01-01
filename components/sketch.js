@@ -1,11 +1,11 @@
-'use client'
+'use client';
 import React, { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import { useDropzone } from 'react-dropzone';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import p5 from 'p5';
 
-let word, roop, tSize, textForest, textForest0, p5Canvas;
+let word, roop, tSize, textForest, textForest0, p5Canvas, voicesOfEcriture;
 
 // p5.jsのスケッチコンポーネント
 export const Sketch = () => {
@@ -81,62 +81,65 @@ export const Sketch = () => {
   const [isUploaded, setIsUploaded] = useState(false);
 
   useEffect(() => {
+    // クライアントサイドでのみ p5.js を読み込む
+    if (typeof window !== 'undefined') {
+      // p5.jsの描画処理
+      voicesOfEcriture = (p) => {  
+        p.setup = () => {
+          // セットアップ処理
+          p.createCanvas(p.windowWidth, p.windowHeight);
+          // noLoop();
+          roop = 120;
+          p.frameRate(0.5);
+        };
+      
+        p.draw = () => {
+          let textForestBox = [];
+          let y = [];
+        
+          let index1, index2;
+          p.background(0);
+          textForest = textForest0.split("。");
+          textForest = p.shuffle(textForest);
+        
+          for (let i = 0; i < textForest.length; i++) {
+            textForestBox[i] = textForest[i].split(" ");
+            textForestBox[i] = p.shuffle(textForestBox[i]);
+          }
+        
+          textForestBox = p.shuffle(textForestBox);
+
+          for (let i = 1; i < roop * 2; i++) {
+            y[i] = (p.height / roop) * 2 * i;
+          }
+          y = p.shuffle(y);
+          index1 = p.floor(p.random(textForestBox.length));
+          index2 = p.floor(p.random(textForestBox[index1].length));
+        
+          for (let i = 0; i < roop; i++) {
+            tSize = p.random(15, 45);
+            index1 = p.floor(p.random(textForestBox.length));
+            index2 = p.floor(p.random(textForestBox[index1].length));
+            word = textForestBox[index1][index2];
+        
+            p.textSize(tSize);
+            p.fill(p.random(255), p.random(255), p.random(255));
+            p.text(word, p.random(-300, p.width - 300), y[i]);
+          }
+        };
+
+        p.windowResized = () => {
+          p.resizeCanvas(p.windowWidth, p.windowHeight);
+        }
+      };
+    };
+  },[]);
+
+  useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
       return;
     }
-    // p5.jsの描画処理
-    const voicesOfEcriture = (p) => {
-
-      // textForest0 = "私は、あなたの声を聞いている。あなたは、私"
-      
-      p.setup = () => {
-        // セットアップ処理
-        p.createCanvas(p.windowWidth, p.windowHeight);
-        // noLoop();
-        roop = 120;
-        p.frameRate(0.5);
-      };
-    
-      p.draw = () => {
-        let textForestBox = [];
-        let y = [];
-      
-        let index1, index2;
-        p.background(0);
-        textForest = textForest0.split("。");
-        textForest = p.shuffle(textForest);
-      
-        for (let i = 0; i < textForest.length; i++) {
-          textForestBox[i] = textForest[i].split(" ");
-          textForestBox[i] = p.shuffle(textForestBox[i]);
-        }
-      
-        textForestBox = p.shuffle(textForestBox);
-
-        for (let i = 1; i < roop * 2; i++) {
-          y[i] = (p.height / roop) * 2 * i;
-        }
-        y = p.shuffle(y);
-        index1 = p.floor(p.random(textForestBox.length));
-        index2 = p.floor(p.random(textForestBox[index1].length));
-      
-        for (let i = 0; i < roop; i++) {
-          tSize = p.random(15, 45);
-          index1 = p.floor(p.random(textForestBox.length));
-          index2 = p.floor(p.random(textForestBox[index1].length));
-          word = textForestBox[index1][index2];
-      
-          p.textSize(tSize);
-          p.fill(p.random(255), p.random(255), p.random(255));
-          p.text(word, p.random(-300, p.width - 300), y[i]);
-        }
-      };
-
-      p.windowResized = () => {
-        p.resizeCanvas(p.windowWidth, p.windowHeight);
-      }
-    };
 
     if(acceptedFiles[0]){
       setIsUploaded(true);

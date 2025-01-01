@@ -5,10 +5,10 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import p5 from 'p5';
 
-let word, roop, tSize, textForest, textForest0, p5Canvas, voicesOfEcriture;
+let word, roop, tSize, textForest, textForest0, p5Canvas;
 
 // p5.jsのスケッチコンポーネント
-export const Sketch = () => {
+const Sketch = () => {
   //ファイルアップロードの処理
   ////テキストの取得
   const onDrop = useCallback((acceptedFiles) => {
@@ -80,60 +80,55 @@ export const Sketch = () => {
   //ファイルアップロード前か後かのState
   const [isUploaded, setIsUploaded] = useState(false);
 
-  useEffect(() => {
-    // クライアントサイドでのみ p5.js を読み込む
-    if (typeof window !== 'undefined') {
-      // p5.jsの描画処理
-      voicesOfEcriture = (p) => {  
-        p.setup = () => {
-          // セットアップ処理
-          p.createCanvas(p.windowWidth, p.windowHeight);
-          // noLoop();
-          roop = 120;
-          p.frameRate(0.5);
-        };
-      
-        p.draw = () => {
-          let textForestBox = [];
-          let y = [];
-        
-          let index1, index2;
-          p.background(0);
-          textForest = textForest0.split("。");
-          textForest = p.shuffle(textForest);
-        
-          for (let i = 0; i < textForest.length; i++) {
-            textForestBox[i] = textForest[i].split(" ");
-            textForestBox[i] = p.shuffle(textForestBox[i]);
-          }
-        
-          textForestBox = p.shuffle(textForestBox);
-
-          for (let i = 1; i < roop * 2; i++) {
-            y[i] = (p.height / roop) * 2 * i;
-          }
-          y = p.shuffle(y);
-          index1 = p.floor(p.random(textForestBox.length));
-          index2 = p.floor(p.random(textForestBox[index1].length));
-        
-          for (let i = 0; i < roop; i++) {
-            tSize = p.random(15, 45);
-            index1 = p.floor(p.random(textForestBox.length));
-            index2 = p.floor(p.random(textForestBox[index1].length));
-            word = textForestBox[index1][index2];
-        
-            p.textSize(tSize);
-            p.fill(p.random(255), p.random(255), p.random(255));
-            p.text(word, p.random(-300, p.width - 300), y[i]);
-          }
-        };
-
-        p.windowResized = () => {
-          p.resizeCanvas(p.windowWidth, p.windowHeight);
-        }
-      };
+  // p5.jsの描画処理
+  const voicesOfEcriture = (p) => {  
+    p.setup = () => {
+      // セットアップ処理
+      p.createCanvas(p.windowWidth, p.windowHeight);
+      // noLoop();
+      roop = 120;
+      p.frameRate(0.5);
     };
-  },[]);
+  
+    p.draw = () => {
+      let textForestBox = [];
+      let y = [];
+    
+      let index1, index2;
+      p.background(0);
+      textForest = textForest0.split("。");
+      textForest = p.shuffle(textForest);
+    
+      for (let i = 0; i < textForest.length; i++) {
+        textForestBox[i] = textForest[i].split(" ");
+        textForestBox[i] = p.shuffle(textForestBox[i]);
+      }
+    
+      textForestBox = p.shuffle(textForestBox);
+
+      for (let i = 1; i < roop * 2; i++) {
+        y[i] = (p.height / roop) * 2 * i;
+      }
+      y = p.shuffle(y);
+      index1 = p.floor(p.random(textForestBox.length));
+      index2 = p.floor(p.random(textForestBox[index1].length));
+    
+      for (let i = 0; i < roop; i++) {
+        tSize = p.random(15, 45);
+        index1 = p.floor(p.random(textForestBox.length));
+        index2 = p.floor(p.random(textForestBox[index1].length));
+        word = textForestBox[index1][index2];
+    
+        p.textSize(tSize);
+        p.fill(p.random(255), p.random(255), p.random(255));
+        p.text(word, p.random(-300, p.width - 300), y[i]);
+      }
+    };
+
+    p.windowResized = () => {
+      p.resizeCanvas(p.windowWidth, p.windowHeight);
+    }
+  };
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -141,7 +136,7 @@ export const Sketch = () => {
       return;
     }
 
-    if(acceptedFiles[0]){
+    if(acceptedFiles[0] && typeof window !== 'undefined'){
       setIsUploaded(true);
       p5Canvas = new p5(voicesOfEcriture); // p5.jsのキャンバスを生成
     }
@@ -179,3 +174,5 @@ export const Sketch = () => {
     </Stack>
   );
 };
+
+export default Sketch;

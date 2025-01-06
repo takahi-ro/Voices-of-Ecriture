@@ -84,7 +84,7 @@ const Sketch = () => {
   const voicesOfEcriture = (p) => {  
     p.setup = () => {
       // セットアップ処理
-      p.createCanvas(p.windowWidth, p.windowHeight);
+      p.createCanvas(p.windowWidth - 16, p.windowHeight - 16);
       // noLoop();
       roop = 120;
       p.frameRate(0.5);

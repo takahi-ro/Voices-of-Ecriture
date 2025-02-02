@@ -4,11 +4,20 @@ import { useDropzone } from 'react-dropzone';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import p5 from 'p5';
+import Description from './description';
 
-let word, roop, tSize, textForest, textForest0, p5Canvas;
+let p5Canvas, textForest0;
+
 
 // p5.jsのスケッチコンポーネント
 const Sketch = () => {
+  //パラメータの初期値をセット
+  const parameters = {
+    textBaseSize: 30,
+    textColor: "random",
+    frameRate: 0.5,
+  };
+
   //ファイルアップロードの処理
   ////テキストの取得
   const onDrop = useCallback((acceptedFiles) => {
@@ -82,12 +91,14 @@ const Sketch = () => {
 
   // p5.jsの描画処理
   const voicesOfEcriture = (p) => {  
+    let word, roop, tSize, textForest;
+
     p.setup = () => {
       // セットアップ処理
-      p.createCanvas(p.windowWidth - 16, p.windowHeight - 16);
+      p.createCanvas(p.windowWidth - 16, p.windowHeight - 81);
       // noLoop();
       roop = 120;
-      p.frameRate(0.5);
+      p.frameRate(parameters.frameRate);
     };
   
     p.draw = () => {
@@ -114,13 +125,40 @@ const Sketch = () => {
       index2 = p.floor(p.random(textForestBox[index1].length));
     
       for (let i = 0; i < roop; i++) {
-        tSize = p.random(15, 45);
+        tSize = p.random(parameters.textBaseSize / 2, parameters.textBaseSize * 1.5);
         index1 = p.floor(p.random(textForestBox.length));
         index2 = p.floor(p.random(textForestBox[index1].length));
         word = textForestBox[index1][index2];
-    
         p.textSize(tSize);
-        p.fill(p.random(255), p.random(255), p.random(255));
+        switch(parameters.textColor){
+          case "random":
+            p.fill(p.random(255), p.random(255), p.random(255));
+            break;
+          case "white":
+            p.fill(255);
+            break;
+          case "red":
+            p.fill(255, 0, 0);
+            break;
+          case "green":
+            p.fill(0, 255, 0);
+            break;
+          case "blue":
+            p.fill(0, 0, 255);
+            break;
+          case "yellow":
+            p.fill(255, 255, 0);
+            break;
+          case "cyan":
+            p.fill(0, 255, 255);
+            break;
+          case "magenta":
+            p.fill(255, 0, 255);
+            break;
+          default:
+            p.fill(p.random(255), p.random(255), p.random(255));
+            break
+        }
         p.text(word, p.random(-300, p.width - 300), y[i]);
       }
     };
@@ -136,7 +174,7 @@ const Sketch = () => {
       return;
     }
 
-    if(acceptedFiles[0] && typeof window !== 'undefined'){
+    if(acceptedFiles[0]){
       setIsUploaded(true);
       p5Canvas = new p5(voicesOfEcriture); // p5.jsのキャンバスを生成
     }
@@ -145,6 +183,7 @@ const Sketch = () => {
   return (
     !isUploaded ?
     <>
+      <Description />
       <section className="container">
         <div {...getRootProps({style})}>
           <input {...getInputProps()}
@@ -164,12 +203,15 @@ const Sketch = () => {
     >
       <Button 
         variant="contained"
-        sx={{ marginBottom: '15px' }}
+        sx={{ 
+          marginBottom: '15px',
+          marginTop: '7px',
+         }}
         onClick = {() => {  
           p5Canvas.remove();
           setIsUploaded(false);
         }}>
-        リセット
+        ファイルを変更する
       </Button>
     </Stack>
   );

@@ -202,7 +202,7 @@ const Sketch = () => {
       useFlexGap
     >
       <Button 
-        variant="contained"
+        variant="outlined"
         sx={{ 
           marginBottom: '15px',
           marginTop: '7px',

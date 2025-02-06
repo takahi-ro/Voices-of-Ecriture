@@ -12,10 +12,11 @@ let p5Canvas, textForest0;
 // p5.jsのスケッチコンポーネント
 const Sketch = () => {
   //パラメータの初期値をセット
+  //TODO：useStateでパラメータを更新できるようにしたいが、SSRエラーになる
   const parameters = {
     textBaseSize: 30,
     textColor: "random",
-    frameRate: 0.5,
+    frameRate: 0.3,
   };
 
   //ファイルアップロードの処理

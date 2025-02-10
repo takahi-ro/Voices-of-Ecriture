@@ -96,7 +96,7 @@ const Sketch = () => {
 
     p.setup = () => {
       // セットアップ処理
-      p.createCanvas(p.windowWidth - 16, p.windowHeight - 81);
+      p.createCanvas(p.windowWidth-16, p.windowHeight);
       // noLoop();
       roop = 120;
       p.frameRate(parameters.frameRate);

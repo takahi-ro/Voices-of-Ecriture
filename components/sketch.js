@@ -363,7 +363,7 @@ const Sketch = () => {
                 autoFocus
                 value={frameRate}
                 onChange={handleFrameRateChange}
-                label="フォント"
+                label="フレームレート"
                 inputProps={{
                   name: 'frameRate',
                   id: 'frameRate',

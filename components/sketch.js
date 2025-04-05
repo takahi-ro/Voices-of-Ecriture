@@ -5,18 +5,72 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import p5 from 'p5';
 import Description from './description';
+import Box from '@mui/material/Box';
+import Dialog, { DialogProps } from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 let p5Canvas, textForest0;
 
 
 // p5.jsのスケッチコンポーネント
 const Sketch = () => {
+
+  //設定変更のダイアログのコード
+  const [open, setOpen] = React.useState(false);
+  const [textColor, setTextColor] = React.useState('random');
+  const [textBaseSize, setTextBaseSize] = React.useState(30);
+  const [frameRate, setFrameRate] = React.useState(0.3);
+
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleTextColorChange = (event) => {
+    setTextColor(
+      // @ts-expect-error autofill of arbitrary value is not handled.
+      event.target.value,
+    );
+  };
+
+  const handleTextBaseSizeChange = (event) => {
+    setTextBaseSize(event.target.value);
+  }
+
+  const handleFrameRateChange = (event) => {
+    setFrameRate(
+      // @ts-expect-error autofill of arbitrary value is not handled.
+      event.target.value,
+    );
+  }
+
+  const updateCanvas = () => {
+    const newParameters = {
+      textBaseSize,
+      textColor, 
+      frameRate,
+    };
+    p5Canvas.remove();   
+    p5Canvas = new p5((p) => voicesOfEcriture(p, newParameters)); // p5.jsのキャンバスを生成
+    setOpen(false);
+  }
   //パラメータの初期値をセット
-  //TODO：useStateでパラメータを更新できるようにしたいが、SSRエラーになる
   const parameters = {
-    textBaseSize: 30,
-    textColor: "random",
-    frameRate: 0.3,
+    textBaseSize,
+    textColor,
+    frameRate,
   };
 
   //ファイルアップロードの処理
@@ -91,7 +145,7 @@ const Sketch = () => {
   const [isUploaded, setIsUploaded] = useState(false);
 
   // p5.jsの描画処理
-  const voicesOfEcriture = (p) => {  
+  const voicesOfEcriture = (p, params = parameters) => {  
     let word, roop, tSize, textForest;
 
     p.setup = () => {
@@ -99,7 +153,7 @@ const Sketch = () => {
       p.createCanvas(p.windowWidth-16, p.windowHeight);
       // noLoop();
       roop = 120;
-      p.frameRate(parameters.frameRate);
+      p.frameRate(params.frameRate);
     };
   
     p.draw = () => {
@@ -126,12 +180,12 @@ const Sketch = () => {
       index2 = p.floor(p.random(textForestBox[index1].length));
     
       for (let i = 0; i < roop; i++) {
-        tSize = p.random(parameters.textBaseSize / 2, parameters.textBaseSize * 1.5);
+        tSize = p.random(params.textBaseSize / 2, params.textBaseSize * 1.5);
         index1 = p.floor(p.random(textForestBox.length));
         index2 = p.floor(p.random(textForestBox[index1].length));
         word = textForestBox[index1][index2];
         p.textSize(tSize);
-        switch(parameters.textColor){
+        switch(params.textColor){
           case "random":
             p.fill(p.random(255), p.random(255), p.random(255));
             break;
@@ -194,14 +248,24 @@ const Sketch = () => {
         </div>
       </section>
     </> : 
+    <>
     <Stack 
-      spacing={0.5} 
-      direction="column"  sx={{
-      justifyContent: "center",
+      spacing={2} 
+      direction="row"  sx={{
+      justifyContent: "left",
       alignItems: "flex-start",
       }}
       useFlexGap
     >
+    <Button 
+      variant="contained"
+      sx={{ 
+        marginBottom: '15px',
+        marginTop: '7px',
+       }}
+       onClick={handleClickOpen}>
+      設定を変更する
+    </Button>
       <Button 
         variant="outlined"
         sx={{ 
@@ -209,12 +273,126 @@ const Sketch = () => {
           marginTop: '7px',
          }}
         onClick = {() => {  
-          p5Canvas.remove();
-          setIsUploaded(false);
+          const flag = confirm("本当にアップロードしたテキストファイルを変更しますか？今の設定は保存されません。");
+          if(flag){
+            p5Canvas.remove();
+            setIsUploaded(false);
+          }
         }}>
         ファイルを変更する
       </Button>
     </Stack>
+    <Dialog
+        fullWidth={false}
+        maxWidth={"md"}
+        open={open}
+        onClose={handleClose}
+      >
+        <DialogTitle>設定の変更</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            描画の設定を変更できます。変更後の設定内容を反映する場合は、Updateボタンを押してください。
+          </DialogContentText>
+          <Box
+            noValidate
+            component="form"
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              m: 'auto',
+              width: 'fit-content',
+            }}
+          >
+            <Stack 
+              spacing={2} 
+              direction="row"  sx={{
+              justifyContent: "left",
+              alignItems: "flex-start",
+              }}
+              useFlexGap
+            >
+              <FormControl sx={{ mt: 4, minWidth: 220 }}>
+                <InputLabel htmlFor="text-color">文字の色</InputLabel>
+                <Select
+              
+                  autoFocus
+                  value={textColor}
+                  onChange={handleTextColorChange}
+                  label="文字の色"
+                  inputProps={{
+                    name: 'text-color',
+                    id: 'text-color',
+                  }}
+                >
+                  <MenuItem value="random">ランダム</MenuItem>
+                  <MenuItem value="white">白</MenuItem>
+                  <MenuItem value="red">赤</MenuItem>
+                  <MenuItem value="green">緑</MenuItem>
+                  <MenuItem value="blue">青</MenuItem>
+                  <MenuItem value="yellow">黄</MenuItem>
+                  <MenuItem value="cyan">シアン</MenuItem>
+                  <MenuItem value="magenta">マゼンタ</MenuItem>
+                </Select>
+              </FormControl>
+              <FormControl sx={{ mt: 4, minWidth: 220 }}>
+              <InputLabel htmlFor="textBaseSize">文字の大きさの基準値</InputLabel>
+              <Select
+                autoFocus
+                value={textBaseSize}
+                onChange={handleTextBaseSizeChange}
+                label="文字の大きさの基準値"
+                inputProps={{
+                  name: 'textBaseSize',
+                  id: 'textBaseSize',
+                }}
+              >
+                <MenuItem value={10}>10</MenuItem>
+                <MenuItem value={20}>20</MenuItem>
+                <MenuItem value={30}>30</MenuItem>
+                <MenuItem value={40}>40</MenuItem>
+                <MenuItem value={50}>50</MenuItem>
+                <MenuItem value={60}>60</MenuItem>
+                <MenuItem value={70}>70</MenuItem>
+                <MenuItem value={80}>80</MenuItem>
+                <MenuItem value={90}>90</MenuItem>
+                <MenuItem value={100}>100</MenuItem>
+
+              </Select>
+            </FormControl>
+
+            <FormControl sx={{ mt: 4, minWidth: 220 }}>
+              <InputLabel htmlFor="frameRate">フレームレート</InputLabel>
+              <Select
+                autoFocus
+                value={frameRate}
+                onChange={handleFrameRateChange}
+                label="フォント"
+                inputProps={{
+                  name: 'frameRate',
+                  id: 'frameRate',
+                }}
+              >
+                <MenuItem value={0.1}>1</MenuItem>
+                <MenuItem value={0.2}>2</MenuItem>
+                <MenuItem value={0.3}>3</MenuItem>
+                <MenuItem value={0.4}>4</MenuItem>
+                <MenuItem value={0.5}>5</MenuItem>
+                <MenuItem value={0.6}>6</MenuItem>
+                <MenuItem value={0.7}>7</MenuItem>
+                <MenuItem value={0.8}>8</MenuItem>
+                <MenuItem value={0.9}>9</MenuItem>
+                <MenuItem value={1.0}>10</MenuItem>
+              </Select>
+            </FormControl>
+            </Stack>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="outlined" onClick={handleClose}>Cancel</Button>
+          <Button variant="contained"onClick={updateCanvas}>Update</Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

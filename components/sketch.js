@@ -273,11 +273,8 @@ const Sketch = () => {
           marginTop: '7px',
          }}
         onClick = {() => {  
-          const flag = confirm("本当にアップロードしたテキストファイルを変更しますか？今の設定は保存されません。");
-          if(flag){
             p5Canvas.remove();
             setIsUploaded(false);
-          }
         }}>
         ファイルを変更する
       </Button>

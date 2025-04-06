@@ -191,35 +191,12 @@ const Sketch = () => {
         index1 = p.floor(p.random(textForestBox.length));
         index2 = p.floor(p.random(textForestBox[index1].length));
         word = textForestBox[index1][index2];
+
         p.textSize(tSize);
-        switch(params.textColor){
-          case "random":
-            p.fill(p.random(255), p.random(255), p.random(255));
-            break;
-          case "white":
-            p.fill(255);
-            break;
-          case "red":
-            p.fill(255, 0, 0);
-            break;
-          case "green":
-            p.fill(0, 255, 0);
-            break;
-          case "blue":
-            p.fill(0, 0, 255);
-            break;
-          case "yellow":
-            p.fill(255, 255, 0);
-            break;
-          case "cyan":
-            p.fill(0, 255, 255);
-            break;
-          case "magenta":
-            p.fill(255, 0, 255);
-            break;
-          default:
-            p.fill(p.random(255), p.random(255), p.random(255));
-            break
+        if(params.textColor === "random"){
+          p.fill(p.random(255), p.random(255), p.random(255));
+        }else{
+          p.fill(params.textColor);
         }
         p.text(word, p.random(-300, p.width - 300), y[i]);
       }

@@ -73,6 +73,15 @@ const Sketch = () => {
     setAlertOpen(false);
   };
 
+  const handleAlertCloseAndRemove = () => {
+    p5Canvas.remove();
+    setTextColor('random');
+    setTextBaseSize(30);
+    setFrameRate(0.3);
+    setAlertOpen(false);
+    setIsUploaded(false);
+  };
+
   //パラメータの初期値をセット
   const parameters = {
     textBaseSize,
@@ -277,10 +286,7 @@ const Sketch = () => {
     </DialogContent>
     <DialogActions>
       <Button variant= "contained" onClick={handleAlertClose}>CANCEL</Button>
-      <Button variant="outlined" onClick={() => {
-          p5Canvas.remove();
-          setIsUploaded(false);
-      }} autoFocus>
+      <Button variant="outlined" onClick={handleAlertCloseAndRemove} autoFocus>
         変更する
       </Button>
     </DialogActions>

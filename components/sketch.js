@@ -280,8 +280,8 @@ const Sketch = () => {
     </DialogTitle>
     <DialogContent>
       <DialogContentText id="alert-dialog-description">
-        アップロードしたテキストファイルを変更すると、現在の設定が破棄されます。現在の設定は保存されません。<br />
-        TOPページに戻って、別のテキストファイルをアップロードしますか？
+        テキストファイルをアップロードし直すと、設定は初期値に戻ります。現在の設定は保存されません。<br />
+        TOPページに戻って、別のテキストファイルをアップロードし直しますか？
       </DialogContentText>
     </DialogContent>
     <DialogActions>

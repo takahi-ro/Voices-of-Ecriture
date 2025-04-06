@@ -6,29 +6,25 @@ import Stack from '@mui/material/Stack';
 import p5 from 'p5';
 import Description from './description';
 import Box from '@mui/material/Box';
-import Dialog, { DialogProps } from '@mui/material/Dialog';
+import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 let p5Canvas, textForest0;
 
-
 // p5.jsのスケッチコンポーネント
 const Sketch = () => {
-
   //設定変更のダイアログのコード
   const [open, setOpen] = React.useState(false);
   const [textColor, setTextColor] = React.useState('random');
   const [textBaseSize, setTextBaseSize] = React.useState(30);
   const [frameRate, setFrameRate] = React.useState(0.3);
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -66,6 +62,17 @@ const Sketch = () => {
     p5Canvas = new p5((p) => voicesOfEcriture(p, newParameters)); // p5.jsのキャンバスを生成
     setOpen(false);
   }
+  //ファイル変更のダイアログのコード
+  const [alertOpen, setAlertOpen] = React.useState(false);
+
+  const handleAlertOpen = () => {
+    setAlertOpen(true);
+  };
+
+  const handleAlertClose = () => {
+    setAlertOpen(false);
+  };
+
   //パラメータの初期値をセット
   const parameters = {
     textBaseSize,
@@ -257,28 +264,51 @@ const Sketch = () => {
       }}
       useFlexGap
     >
-    <Button 
-      variant="contained"
-      sx={{ 
-        marginBottom: '15px',
-        marginTop: '7px',
-       }}
-       onClick={handleClickOpen}>
-      設定を変更する
-    </Button>
+      <Button 
+        variant="contained"
+        sx={{ 
+          marginBottom: '15px',
+          marginTop: '7px',
+        }}
+        onClick={handleClickOpen}>
+        設定を変更する
+      </Button>
       <Button 
         variant="outlined"
         sx={{ 
           marginBottom: '15px',
           marginTop: '7px',
-         }}
-        onClick = {() => {  
-            p5Canvas.remove();
-            setIsUploaded(false);
-        }}>
+          }}
+        onClick = {handleAlertOpen}>
         ファイルを変更する
       </Button>
     </Stack>
+    <Dialog
+    open={alertOpen}
+    onClose={handleAlertClose}
+    aria-labelledby="alert-dialog-title"
+    aria-describedby="alert-dialog-description"
+  >
+    <DialogTitle id="alert-dialog-title">
+      {"本当にファイルを変更しますか？"}
+    </DialogTitle>
+    <DialogContent>
+      <DialogContentText id="alert-dialog-description">
+        アップロードしたテキストファイルを変更すると、現在の設定が破棄されます。現在の設定は保存されません。<br />
+        TOPページに戻って、別のテキストファイルをアップロードしますか？
+      </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+      <Button variant= "contained" onClick={handleAlertClose}>CANCEL</Button>
+      <Button variant="outlined" onClick={() => {
+          p5Canvas.remove();
+          setIsUploaded(false);
+      }} autoFocus>
+        変更する
+      </Button>
+    </DialogActions>
+  </Dialog>
+    
     <Dialog
         fullWidth={false}
         maxWidth={"md"}

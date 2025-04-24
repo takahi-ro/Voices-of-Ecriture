@@ -3,7 +3,14 @@
 
 [原作：エクリチュールの声](https://neort.io/art/ce3k81sn70rlpj69c980?origin=art_creation&newRelease=false)
 
-また、LLM(大規模言語モデル)のアンチテーゼというメッセージを、本アプリには込めています(後述)。
+また、LLM(大規模言語モデル)のアンチテーゼというメッセージを、本アプリには込めています（後述）。  
+
+## デモ動画
+
+
+https://github.com/user-attachments/assets/970558a7-9668-4b15-94ce-9cb9aeb14fcc    
+
+
 
 ## 使い方
 1. 任意のメモアプリや読書管理アプリに読書メモを残す

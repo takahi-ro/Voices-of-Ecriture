@@ -182,7 +182,7 @@ const Sketch = () => {
       textForest = p.shuffle(textForest);
     
       for (let i = 0; i < textForest.length; i++) {
-        textForestBox[i] = textForest[i].split(" ");
+        textForestBox[i] = textForest[i].split(/[\n\s]+/);
         textForestBox[i] = p.shuffle(textForestBox[i]);
       }
     

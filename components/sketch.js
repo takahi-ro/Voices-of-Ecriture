@@ -285,7 +285,7 @@ const Sketch = () => {
       </DialogContentText>
     </DialogContent>
     <DialogActions>
-      <Button variant= "contained" onClick={handleAlertClose}>CANCEL</Button>
+      <Button variant= "contained" onClick={handleAlertClose}>キャンセル</Button>
       <Button variant="outlined" onClick={handleAlertCloseAndRemove} autoFocus>
         変更する
       </Button>
@@ -398,8 +398,8 @@ const Sketch = () => {
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-          <Button variant="contained"onClick={updateCanvas}>Update</Button>
+          <Button variant="outlined" onClick={handleClose}>キャンセル</Button>
+          <Button variant="contained"onClick={updateCanvas}>更新</Button>
         </DialogActions>
       </Dialog>
     </>

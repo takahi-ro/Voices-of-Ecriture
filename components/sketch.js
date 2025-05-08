@@ -127,10 +127,11 @@ const Sketch = () => {
     padding: '20px',
     borderWidth: 2,
     borderRadius: 2,
-    borderColor: '#eeeeee',
+    borderColor: '#cccccc',
     borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#aaaaaa',
+    backgroundColor: '#eeeeee99',
+    fontSize: '18px',
+    color: '#666666cc',
     outline: 'none',
     transition: 'border .24s ease-in-out'
   };

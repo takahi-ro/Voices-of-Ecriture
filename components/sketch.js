@@ -15,6 +15,8 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowUpFromBracket } from '@fortawesome/free-solid-svg-icons'
 
 let p5Canvas, textForest0;
 
@@ -130,6 +132,7 @@ const Sketch = () => {
     borderColor: '#cccccc',
     borderStyle: 'dashed',
     backgroundColor: '#eeeeee99',
+    paddingTop: '40px',
     fontSize: '18px',
     color: '#666666cc',
     outline: 'none',
@@ -236,8 +239,8 @@ const Sketch = () => {
       <section className="container">
         <div {...getRootProps({style})}>
           <input {...getInputProps()}
-          // onChange = { e => handleFileText(e)}
           />
+          <FontAwesomeIcon icon={faArrowUpFromBracket} bounce size="2xl" style={{color: "666666cc",}} />
           <p>ドラッグ＆ドロップかクリックして、あなたの読書メモのテキストファイル(.txt)を１つアップロードしてください。</p>
         </div>
       </section>

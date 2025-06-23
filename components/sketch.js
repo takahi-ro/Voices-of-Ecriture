@@ -305,7 +305,7 @@ const Sketch = () => {
         <DialogTitle>設定の変更</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            描画の設定を変更できます。変更後の設定内容を反映する場合は、Updateボタンを押してください。
+            描画の設定を変更できます。変更後の設定内容を反映する場合は、更新ボタンを押してください。
           </DialogContentText>
           <Box
             noValidate

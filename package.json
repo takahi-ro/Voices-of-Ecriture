@@ -19,10 +19,10 @@
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
     "@mui/material": "^6.3.0",
-    "next": "^14.2.30",
+    "next": "^16.0.7",
     "p5": "^1.11.2",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
     "react-dropzone": "^14.3.5"
   },
   "peerDependencies": {
